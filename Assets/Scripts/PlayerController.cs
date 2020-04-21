@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
     Collider2D collider2D;
     BoxCollider2D feet;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,5 +55,10 @@ public class PlayerController : MonoBehaviour
     private void FlipCharacter(float facingSpeed){
         if(Mathf.Abs(facingSpeed) > 0)
             this.transform.localScale = new Vector2(Mathf.Sign(facingSpeed), 1.0f);
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        if(other.gameObject.tag.Equals("Enemy"))
+            Debug.Log(other.gameObject.name);
     }
 }
