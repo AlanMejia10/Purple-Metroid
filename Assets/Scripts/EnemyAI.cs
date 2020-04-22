@@ -9,6 +9,7 @@ public class EnemyAI : MonoBehaviour
     float moveRange = 7.0f;
     [SerializeField] GameObject target;
     Animator animController;
+    float healt = 100.0f;
     // Start is called before the first frame update
     void Start(){
         animController = GetComponent<Animator>();
@@ -37,5 +38,9 @@ public class EnemyAI : MonoBehaviour
 
         if (Mathf.Abs(areFacingEachOther) > 0)
             this.transform.localScale = new Vector2(-Mathf.Sign(areFacingEachOther), 1.0f);
+    }
+
+    public void Health(int damage){
+        healt -= damage;
     }
 }
