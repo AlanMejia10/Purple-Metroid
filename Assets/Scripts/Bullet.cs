@@ -22,7 +22,6 @@ public class Bullet : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        Debug.Log("collied with: " + other.gameObject.name);
         GameObject bullet = Instantiate(impactEffect, transform.position, Quaternion.identity);
         Destroy(bullet, 0.3f);
         Destroy(gameObject);

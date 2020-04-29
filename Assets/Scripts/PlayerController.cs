@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     BoxCollider2D feet;
     [SerializeField] Transform shootPoint;
     [SerializeField] GameObject bulletPrefab; 
+    AudioSource shootSound;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         collider2D = GetComponent<Collider2D>();
         feet = GetComponent<BoxCollider2D>();
+        shootSound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -57,14 +59,14 @@ public class PlayerController : MonoBehaviour
             float horizontalMove = Input.GetAxis("Horizontal") * speed;
 
             if(Mathf.Abs(horizontalMove) == 0.0){
-                animController.SetBool("isShootingIdle", true);
-                Instantiate(bulletPrefab, shootPoint.transform.position, Quaternion.identity);
+                StartCoroutine("SootingFire");
                 //bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(5.0f, 0);
                 return;
             }else if(Mathf.Abs(horizontalMove) != 0){
                 animController.SetBool("isShootingRunning", true);
             }
         }else if(Input.GetButtonUp("Fire1")){
+            StopCoroutine("SootingFire");
             animController.SetBool("isShootingIdle", false);
             animController.SetBool("isShootingRunning", false);
         }
@@ -78,5 +80,14 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other) {
         if(other.gameObject.tag.Equals("Enemy"))
             Debug.Log(other.gameObject.name);
+    }
+
+    private IEnumerator SootingFire(){
+        while(true){
+            animController.SetBool("isShootingIdle", true);
+            shootSound.Play();
+            Instantiate(bulletPrefab, shootPoint.transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 }
